@@ -1,18 +1,14 @@
-body {
-	background: lightblue;
-	padding:0;
+*{
 	margin:0;
+	padding:0;
+}
+body {
+	background: #484c58;
 	font-family:Arial,Helvetica,sans-serif;
 	font-size:12px;
 }
-ul,li,form {
+ul,li,form{
 	list-style-type:none;
-	margin:0;
-	padding:0;
-}
-p {
-	margin:0;
-	padding:0;
 }
 a {
 	text-decoration:none;
@@ -26,15 +22,18 @@ img {
 	display:block;
 	height:0;
 	clear:both;
-	visibility:hidden}
+	visibility:hidden
+}
 * html>body .clearfix {
 	display:inline-block;
-	width:100%}
+	width:100%
+}
 * html .clearfix {
 	height:1%;
 }
 *+html .clearfix {
-	min-height:1%}
+	min-height:1%
+}
 /*body {
 	font-family:MicroSoft YaHei,simHei;
 	position:absolute;
@@ -47,7 +46,8 @@ img {
 	width:100%;
 	margin:0 auto;
 	position:absolute;
-	top:0}*/
+	top:0
+}*/
 .main .top {
 	height:190px;
 }
@@ -87,8 +87,12 @@ img {
 	overflow:hidden;
 }
 .main .footer {
-	height:5px;
-	background:url(images/footer.png) no-repeat;
+	width:50px;
+	height:48px;
+	position:fixed;
+	right:20px;
+	bottom:20px;
+	z-index:100;
 }
 .list #list {
 	width:100%;
@@ -882,15 +886,7 @@ img {
 	color:#ffffff;
 	font-weight:bold;
 }
-.main .footer {
-	width:50px;
-	height:48px;
-	background:none;
-	position:absolute;
-	right:20px;
-	bottom:20px;
-	z-index:100;
-}
+
 .wsh-beak-link {
 	width:48px;
 	height:48px;
