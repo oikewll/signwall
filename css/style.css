@@ -30,10 +30,32 @@ html,body{
 	margin: 0 auto 20px auto;
 	border-radius: 50%;
 	box-shadow: 0 0 15px rgba(0,0,0,.6);
+	position: relative;
 }
 .container .avatar img{
 	width: 100%;
 	height: 100%;
+}
+.container .avatar .ava-btn{
+	font-size: 300px;
+	opacity: 0;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+}
+.container .avatar .txt{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	line-height: 130px;
+	text-align: center;
+	color: #fff;
+	font-size: 12px;
+	background: rgba(0,0,0,.65);
 }
 .container .notice{
 	font-size: 14px;
@@ -109,12 +131,26 @@ html,body{
 	justify-content: center;
 	flex-direction: column;
 }
+.ver-loading{
+	width: 220px;
+	height: 180px;
+	left: 50%;
+	top: 50%;
+	color: #fff;
+	font-size: 40px;
+	border-radius: 15px;
+	-webkit-transform: translate3D(-50%, -50%, 0);
+	background: rgba(0,0,0,.65);
+}
 .sign-success{
 	font-size: 60px;
 	color: #199E26;
 }
 .vertical [class^="icon-"]{
 	margin-bottom: 15px;
+}
+.ver-loading [class^="icon-"]{
+	margin-bottom: 0;
 }
 .vertical .txt{
 	font-size: 16px;
@@ -151,6 +187,7 @@ html,body{
 	text-align: center;
 	line-height: 76px;
 	margin-bottom: 10px;
+	text-indent: 5px;
 }
 .list-item .item .txt{
 	font-size: 14px;

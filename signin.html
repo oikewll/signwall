@@ -19,7 +19,7 @@
 <section class="footer">damn cody by goochin</section>
 
 <textarea id="data-cont" style="display:none;">
-	<span class="avatar"><img src="$headimgurl$" id="user-avatar" alt="$nickname$" /></span>
+	<span class="avatar" id="avatar"><img src="$headimgurl$" id="user-avatar" alt="$nickname$" /><input type="file" name="file" id="file" class="ava-btn" /></span>
 	<p class="notice">Hi~<span id="name1">$nickname$</span>，欢迎您参加本次会议</p>
 	<div class="detail" id="sbm-detail" data-area="$country$,$province$,$city$" data-sex="$sex$" data-openid="$openid$">
 		<ul class="formlist">
@@ -44,7 +44,7 @@
 <script src="js/common.js"></script>
 <script>
 $(function(){
-	var succsign = '<div class="vertical sign-success" id="tips-success"><i class="icon-check"></i><span class="txt">签到成功~</span></div>';
+	var succsign = '<div class="vertical sign-success" id="tips-success"><i class="icon-check"></i><span class="txt">签到成功~</span><p class="desc"><a href="/sigwall/"><<返回</a></p></div>';
 	var signid = "d010";
 	var code = GetQueryString("code");
 	$.ajax({
@@ -76,6 +76,11 @@ $(function(){
 			};
 
 			$("#container").append(temp);
+
+			//监听file事件
+			document.getElementById("file").addEventListener("change", function(){
+				deteckImg(this);
+			});
 				
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
@@ -143,7 +148,7 @@ $(function(){
 			data: details,
 			timeout: 5000,
 			beforeSend: function(){
-				$("#container").html('<div class="vertical" id="loading"><i class="icon-spinner icon-spin"></i></div>');
+				$("#container").html('<div class="vertical ver-loading" id="loading"><i class="icon-spinner icon-spin"></i></div>');
 			},
 			success: function (result) {
 				if (result == 'success') {
@@ -155,6 +160,59 @@ $(function(){
 			}
 		});
 	});
+
+	function deteckImg(obj){
+		//检测格式后缀名
+		var patn = /\.jpg$|\.jpeg$|\.gif$|\.png$/i;
+
+		//检测文件大小
+		var file = obj.files[0];
+
+		if(!obj || !obj.value){
+			return false;
+		}else if (!patn.test(obj.value)) {
+			alert("上传的图片格式仅限jpg/jpeg/png/gif");
+			return false;
+		}else if( file.size > 1 * 1024 * 1024 ){//用size属性判断文件大小不能超过1mb 
+			alert( "你上传的文件太大了！最佳不超过3Mb且正方形");
+			return false;
+		}else{
+			var formData = new FormData();//构造空对象，下面用append 方法赋值。  
+				formData.append("userAvatar", file);
+
+			$.ajax({
+				url : 'upload.php',
+				type : 'POST',
+				data : formData,
+				/**
+				 * 必须false才会避开jQuery对 formdata 的默认处理
+				 * XMLHttpRequest会对 formdata 进行正确的处理
+				 */  
+				processData : false,
+				/**
+				 *必须false才会自动加上正确的Content-Type
+				 */  
+				contentType : false,
+				beforeSend: function(){
+					$("#avatar").append('<span class="txt" id="txt-state">上传中...</span>');
+				},
+				success : function(responseStr) {
+					$("#txt-state").html('上传图片成功 :)');
+					setTimeout(function(){
+						$("#txt-state").remove();
+					}, 1500);
+
+					var imgurl = $.evalJSON(responseStr);
+					$("#user-avatar").attr("src", imgurl['headimgurl']);
+
+					console.log(imgurl);
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					alert("发生网络错误，请重试 :（ "+textStatus);
+				}
+			});
+		}
+	};
 });
 </script>
 </body>
