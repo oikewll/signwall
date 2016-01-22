@@ -20,7 +20,7 @@
 
 <textarea id="data-cont" style="display:none;">
 	<span class="avatar" id="avatar"><img src="$headimgurl$" id="user-avatar" alt="$nickname$" /><input type="file" name="file" id="file" class="ava-btn" /></span>
-	<p class="notice">Hi~<span id="name1">$nickname$</span>，欢迎您参加本次会议</p>
+	<p class="notice">hi~<span id="name1">$nickname$</span>，欢迎来到现场</p>
 	<div class="detail" id="sbm-detail" data-area="$country$,$province$,$city$" data-sex="$sex$" data-openid="$openid$">
 		<ul class="formlist">
 			<li class="item">
@@ -44,8 +44,8 @@
 <script src="js/common.js"></script>
 <script>
 $(function(){
-	var succsign = '<div class="vertical sign-success" id="tips-success"><i class="icon-check"></i><span class="txt">签到成功~</span><p class="desc"><a href="/sigwall/"><<返回</a></p></div>';
-	var signid = "d010";
+	var succsign = '<div class="vertical sign-success" id="tips-success"><i class="icon-check"></i><span class="txt">签到成功~</span><p class="desc"><a href="/signwall/app.html"><i class="icon-double-angle-left"></i>返回</a></p></div>';
+	var signid = GetQueryString("state") ? GetQueryString("state") : 'meeting';
 	var code = GetQueryString("code");
 	$.ajax({
 		url: "oauth2.php", //服务端处理
@@ -111,8 +111,8 @@ $(function(){
 			country = _sbmdetail.attr("data-area").split(",")[0],
 			province = _sbmdetail.attr("data-area").split(",")[1],
 			city = _sbmdetail.attr("data-area").split(",")[2],
-			title = $("#title").val(),
-			talks = $("#talks").val(),
+			title = $("#title").val() != '' ? $("#title").val() : 'notitle',
+			talks = $("#talks").val() != '' ? $("#talks").val() : '我来啦~希望能抽个大奖',
 			_time = new Date(time).toString().split(" ")[4];
 
 		//提交过无法再次提交
@@ -148,7 +148,7 @@ $(function(){
 			data: details,
 			timeout: 5000,
 			beforeSend: function(){
-				$("#container").html('<div class="vertical ver-loading" id="loading"><i class="icon-spinner icon-spin"></i></div>');
+				$("#container").append('<div class="vertical ver-loading" id="loading"><i class="icon-spinner icon-spin"></i></div>');
 			},
 			success: function (result) {
 				if (result == 'success') {

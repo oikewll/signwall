@@ -12,7 +12,8 @@
 <!--[if IE 7 ]><link rel="stylesheet" href="css/font-awesome-ie7.min.css" /><![endif]-->
 </head>
 
-<body class="page-index" oncontextmenu="self.event.returnValue=false">
+<!-- <body oncontextmenu="self.event.returnValue=false"> -->
+<body class="page-index">
 	<div class="floor"></div>
 	<div class="signin-lottery s-bott" style="display:none"><a href="javascript:void(0)" class="wewall-lottery start-lottery">抽奖</a></div>
 	<div class="wewall-bott"></div>
@@ -30,7 +31,7 @@
 				</div>
 			</div>
 			<div class="join-users m">
-				<ul class="user-list" id="user-list">			
+				<ul class="user-list" id="user-list">
 				</ul>
 			</div>
 			<div class="lottery" style="display:none;">
@@ -116,15 +117,14 @@
 <script src="board/js/fullscreen.js"></script>
 <script src="board/js/jquery.lottery.js"></script>
 <script>
-String.prototype.format = function(obj) {
-	return this.replace(/\$\w+\$/gi, function(matchs) {
-		var returns = obj[matchs.replace(/\$/g, "")];		
-		return (returns + "") == "undefined"? "": returns;
-	});
+function GetQueryString(name){
+	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	var r = window.location.search.substr(1).match(reg);
+	if(r!=null)return  unescape(r[2]); return null;
 };
 
 //设置唯一ID
-var signid = 'd010';
+var signid = GetQueryString("signid") ? GetQueryString("signid") : 'meeting';
 var countNum = 0;
 var cacheInterval;
 

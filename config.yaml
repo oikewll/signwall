@@ -1,0 +1,12 @@
+name: fotoline
+version: 1
+accesskey: j0y23xxy51
+cron:
+    - description: json数据存Storage
+	  url: signwall/cron/json2storage.php?signid=meeting
+	  schedule: every 30 mins
+	  timezone: Beijing
+    - description: json数据存Storage
+	  url: signwall/cron/json2storage.php?signid=d010
+	  schedule: every 30 mins
+	  timezone: Beijing

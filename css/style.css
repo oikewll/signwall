@@ -163,6 +163,9 @@ html,body{
 	color: 999px;
 	padding-top: 15px;
 }
+.sign-success .desc a{
+	color: #666;
+}
 
 .appindex{
 	background: #484c58 url(../img/bg-enter.jpg) no-repeat center center;

@@ -1138,6 +1138,15 @@ img {
 	padding: 10px 0;
 	color: #999;
 }
+.user-list{
+	-webkit-columns: none;
+}
+.user-list .item-holder{
+	line-height: normal;
+	widows: 100%;
+	display: block;
+	width: 100%;
+}
 }
 
 
