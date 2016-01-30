@@ -44,49 +44,89 @@
 <script src="js/common.js"></script>
 <script>
 $(function(){
-	var succsign = '<div class="vertical sign-success" id="tips-success"><i class="icon-check"></i><span class="txt">签到成功~</span><p class="desc"><a href="/signwall/app.html"><i class="icon-double-angle-left"></i>返回</a></p></div>';
+	var succsign = '<div class="vertical sign-success" id="tips-success"><i class="icon-check"></i><span class="txt">恭喜你，签到成功~ ：）</span><p class="desc"><a href="/signwall/app.html"><i class="icon-double-angle-left"></i>返回</a></p></div>',
+		preloadtpl = '<div class="vertical" id="loading"><i class="icon-spinner icon-spin"></i></div>';
 	var signid = GetQueryString("state") ? GetQueryString("state") : 'meeting';
 	var code = GetQueryString("code");
-	$.ajax({
-		url: "oauth2.php", //服务端处理
-		type: "GET",
-		// async: false,
-		// dataType: 'jsonp',
-		// jsonpCallback:'callback',
-		data: {
-			"code":code
-		},
-		timeout: 5000,
-		beforeSend: function(){
-			$("#container").html('<div class="vertical" id="loading"><i class="icon-spinner icon-spin"></i></div>');
-		},
-		success: function (result) {
-			$("#loading").remove();
-			var result = $.evalJSON(result);
 
-			//设置模板
-			var htmlTemp = $("#data-cont").val();
-			if (!result['errcode']) {
-				var temp = htmlTemp.format(result);
-			}else{
-				//返回错误码
-				console.log('返回错误码_:'+result['errcode']);
-				var result_loc = JSON.parse(decodeURIComponent(localStorage.getItem("userDetail")));
-				var temp = htmlTemp.format(result_loc);
-			};
+	//本地有用户相关key
+	if (getCookie('userkey')) {
+		var userkey = $.evalJSON(getCookie('userkey'));
+		console.log(userkey);
+		queryData(userkey['openid'], userkey['access_token']);
+	}else{
+		$.ajax({
+			url: "oauth2.php", //服务端处理
+			type: "GET",
+			data: {
+				"code":code
+			},
+			timeout: 5000,
+			beforeSend: function(){
+				$("#container").html(preloadtpl);
+			},
+			success: function (result) {
+				loadTemp(result);
+					
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				alert("发生网络错误，请重试 :（ "+textStatus);
+			}
+		});
+	}
 
-			$("#container").append(temp);
+	function loadTemp(res){
+		$("#loading").remove();
+		var result = $.evalJSON(res);
 
-			//监听file事件
-			document.getElementById("file").addEventListener("change", function(){
-				deteckImg(this);
-			});
-				
-		},
-		error: function (jqXHR, textStatus, errorThrown) {
-			alert("发生网络错误，请重试 :（ "+textStatus);
-		}
-	});
+		//设置模板
+		var htmlTemp = $("#data-cont").val();
+		if (!result['errcode']) {
+			var temp = htmlTemp.format(result);
+		}else{
+			//返回错误码
+			console.log('返回错误码_:'+result['errcode']);
+			var result_loc = JSON.parse(decodeURIComponent(localStorage.getItem("userDetail")));
+			var temp = htmlTemp.format(result_loc);
+		};
+
+		$("#container").append(temp);
+
+		//监听file事件
+		document.getElementById("file").addEventListener("change", function(){
+			deteckImg(this);
+		});
+	};
+
+	//用本地的openid和at拉最新的用户数据
+	function queryData(openid, accessToken){
+		var u = 'https://api.weixin.qq.com/sns/userinfo?access_token='+accessToken+'&openid='+openid+'&lang=zh_CN';
+		$.ajax({
+			url: u,
+			type: "GET",
+			timeout: 5000,
+			beforeSend: function(){
+				$("#container").html(preloadtpl);
+			},
+			success: function (result) {
+				loadTemp(result);
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				alert("发生网络错误，请重试 :（ "+textStatus);
+			}
+		});
+	};
+	function setCookie(name, value, expires, path, domain, secure) {
+		//写入COOKIES
+		var exp = new Date(), expires = arguments[2] || null, path = arguments[3] || "/", domain = arguments[4] || null, secure = arguments[5] || false;
+		expires ? exp.setMinutes(exp.getMinutes() + parseInt(expires)) : "";
+		document.cookie = name + '=' + escape(value) + ( expires ? ';expires=' + exp.toGMTString() : '') + ( path ? ';path=' + path : '') + ( domain ? ';domain=' + domain : '') + ( secure ? ';secure' : '');
+	};
+	function getCookie(name) {
+		//读取COOKIE
+		var reg = new RegExp("(^| )" + name + "(?:=([^;]*))?(;|$)"), val = document.cookie.match(reg);
+		return val ? (val[2] ? unescape(val[2]) : "") : null;
+	};
 
 	/*
 		memdata.php?type=set&signid=1007&headimgurl=http%3A%2F%2Fxx&nickname=goochin&title=developer&sex=154&country=china&province=gd&city=gz3&openid=xex&talks=xxx;

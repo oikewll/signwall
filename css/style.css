@@ -35,6 +35,7 @@ html,body{
 .container .avatar img{
 	width: 100%;
 	height: 100%;
+	border-radius: 50%;/*安卓机挡不住*/
 }
 .container .avatar .ava-btn{
 	font-size: 300px;
@@ -156,7 +157,8 @@ html,body{
 	font-size: 16px;
 }
 .sign-success .txt{
-	font-size: 18px;
+	font-size: 24px;
+	display: block;
 }
 .sign-success .desc{
 	font-size: 12px;
